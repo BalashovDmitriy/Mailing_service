@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from email_distribution.models import EmailDistribution
+from email_distribution.models import EmailDistribution, Message
 
 
 # Create your views here.
@@ -35,11 +35,9 @@ class EmailDistributionCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print('context in Create:')
+        print('context in EmailDistributionCreateView(get_context_data):')
         print(context)
         return context
-
-    # def form_valid(self, form):
 
 
 class EmailDistributionUpdateView(UpdateView):
@@ -50,4 +48,10 @@ class EmailDistributionUpdateView(UpdateView):
 
 class EmailDistributionDeleteView(DeleteView):
     model = EmailDistribution
+    success_url = reverse_lazy('list')
+
+
+class MessageCreateView(CreateView):
+    model = Message
+    fields = ('title', 'body')
     success_url = reverse_lazy('list')
