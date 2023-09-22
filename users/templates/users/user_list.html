@@ -1,0 +1,17 @@
+{% extends 'email_distribution/base.html' %}
+{% block content %}
+<div class="row text-center">
+    <a href="{% url 'create_user' %}" class="btn btn-outline-dark">Создать пользователя</a>
+    {% for object in object_list %}
+        <div class="col-sm-3 mb-3 mb-sm-0">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ object.username }}</h5>
+                    <p class="card-text">{{ object.email }}</p>
+                    <a href="{% url 'detail_user' object.id %}" class="btn btn-primary form-control">Подробнее</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

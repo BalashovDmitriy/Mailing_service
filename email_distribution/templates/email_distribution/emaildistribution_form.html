@@ -1,0 +1,27 @@
+{% extends 'email_distribution/base.html' %}
+{% block content %}
+<div class="col-lg-6 col-md-6 col-sm-12">
+    <div class="card mb-4 box-shadow">
+        <div class="card-header">
+            {% if object %}
+            <h4 class="my-0 font-weight-normal">Редактировать рассылку</h4>
+            {% else %}
+            <h4 class="my-0 font-weight-normal">Создать рассылку</h4>
+            {% endif %}
+        </div>
+        <div class="card-body">
+            <form method="post" action="" class="form-floating form-control">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ form.as_p }}
+                </div>
+                {% if object %}
+                <input class="btn btn-primary w-100" type="submit" value="Редактировать"/>
+                {% else %}
+                <input class="btn btn-primary w-100" type="submit" value="Создать"/>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
