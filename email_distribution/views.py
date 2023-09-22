@@ -1,9 +1,7 @@
-from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from email_distribution.models import EmailDistribution
-from users.models import User
 
 
 # Create your views here.
