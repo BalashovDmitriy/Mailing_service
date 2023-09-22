@@ -16,7 +16,7 @@ class Message(models.Model):
 
 
 class EmailDistribution(models.Model):
-    emails = models.ManyToManyField(User, verbose_name='Пользователи')
+    emails = models.ManyToManyField('users.User', verbose_name='Пользователи')
     time = models.DateTimeField(verbose_name='Время рассылки')
     period = models.CharField(choices=[('1', 'Раз в день'), ('2', 'Раз в неделю'), ('3', 'Раз в месяц')],
                               default='1', verbose_name='Период рассылки')

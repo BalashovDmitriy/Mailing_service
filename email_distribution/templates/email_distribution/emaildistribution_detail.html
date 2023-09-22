@@ -1,0 +1,19 @@
+{% extends 'email_distribution/base.html' %}
+{% block content %}
+<div class="row text-center">
+    <div class="col-sm-3 mb-6 mb-sm-0">
+        <div class="card" style="width: 28rem;">
+            <div class="card-body">
+                <h5 class="card-title">{{ object.emails }}</h5>
+                <p class="card-text">{{ object.time }}</p>
+                <p class="card-text">Создано: {{ object.period }}</p>
+                <p class="card-text">Статус: {{ object.status }}</p>
+                <p class="card-text">Письмо: {{ object.message }}</p>
+                <a href="{% url 'list' %}" class="btn btn-primary">К списку</a>
+                <a href="{% url 'update' object.id %}" class="btn btn-secondary">Редактировать</a>
+                <a href="{% url 'delete' object.id %}" class="btn btn-danger">Удалить</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
