@@ -1,6 +1,8 @@
+from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
+from config import settings
 from email_distribution.models import EmailDistribution, Message
 
 
@@ -39,11 +41,35 @@ class EmailDistributionCreateView(CreateView):
         print(context)
         return context
 
+    def form_valid(self, form):
+        obj: EmailDistribution = form.save()
+        for obj_mail in obj.emails.all():
+            status = send_mail(
+                subject=obj.message.title,
+                message=obj.message.body,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[obj_mail.email],
+            )
+            print(obj_mail.email, status)
+        return super().form_valid(form)
+
 
 class EmailDistributionUpdateView(UpdateView):
     model = EmailDistribution
     fields = ('emails', 'time', 'period', 'message')
     success_url = reverse_lazy('list')
+
+    def form_valid(self, form):
+        obj: EmailDistribution = form.save()
+        for obj_mail in obj.emails.all():
+            status = send_mail(
+                subject=obj.message.title,
+                message=obj.message.body,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[obj_mail.email],
+            )
+            print(obj_mail.email, status)
+        return super().form_valid(form)
 
 
 class EmailDistributionDeleteView(DeleteView):

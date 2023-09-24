@@ -40,10 +40,11 @@ class MessageSendCreateView(CreateView):
     def form_valid(self, form):
         obj: Message = form.save()
         print(obj)
-        send_mail(
+        status = send_mail(
             subject=obj.message.title,
             message=obj.message.body,
             from_email=settings.DEFAULT_FROM_EMAIL,
             recipient_list=[obj.user.email],
         )
+        print(status)
         return super().form_valid(form)

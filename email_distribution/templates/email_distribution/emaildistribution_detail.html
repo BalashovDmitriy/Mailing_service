@@ -1,14 +1,38 @@
 {% extends 'email_distribution/base.html' %}
 {% block content %}
 <div class="row text-center">
-    <div class="col-sm-3 mb-6 mb-sm-0">
-        <div class="card" style="width: 28rem;">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">{{ object.time }}</h5>
+            </div>
             <div class="card-body">
-                <h5 class="card-title">{{ object.emails }}</h5>
-                <p class="card-text">{{ object.time }}</p>
-                <p class="card-text">Создано: {{ object.period }}</p>
-                <p class="card-text">Статус: {{ object.status }}</p>
+                <p class="card-text fw-bold">Получатели:</p>
+                {% for obj in object.emails.all %}
+                <p class="card-text">{{ obj }}</p>
+                {% endfor %}
+                <p class="card-text fw-bold">Параметры рассылки</p>
+                {% if object.period == "1" %}
+                <p class="card-text">Периодичность: Раз в день</p>
+                {% endif %}
+                {% if object.period == "2" %}
+                <p class="card-text">Периодичность: Раз в неделю</p>
+                {% endif %}
+                {% if object.period == "3" %}
+                <p class="card-text">Периодичность: Раз в месяц</p>
+                {% endif %}
+                {% if object.status == 1 %}
+                <p class="card-text">Статус: Создана</p>
+                {% endif %}
+                {% if object.status == 2 %}
+                <p class="card-text">Статус: Запущена</p>
+                {% endif %}
+                {% if object.status == 0 %}
+                <p class="card-text">Статус: Завершена</p>
+                {% endif %}
                 <p class="card-text">Письмо: {{ object.message }}</p>
+            </div>
+            <div class="card-footer">
                 <a href="{% url 'list' %}" class="btn btn-primary">К списку</a>
                 <a href="{% url 'update' object.id %}" class="btn btn-secondary">Редактировать</a>
                 <a href="{% url 'delete' object.id %}" class="btn btn-danger">Удалить</a>
