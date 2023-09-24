@@ -3,15 +3,23 @@
 <div class="row text-center">
     <a href="{% url 'create' %}" class="btn btn-outline-dark">Создать рассылку</a>
     {% for object in object_list %}
-        <div class="col-sm-3 mb-3 mb-sm-0">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">{{ object.emails }}</h5>
-                    <p class="card-text">{{ object.time }}</p>
-                    <a href="{% url 'detail' object.id %}" class="btn btn-primary form-control">Подробнее</a>
-                </div>
+    <div class="col-sm-3 mb-3 mb-sm-0">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ object.time }}</h5>
+                {% if object.status == 1 %}
+                <p class="card-text">Статус: Создана</p>
+                {% endif %}
+                {% if object.status == 2 %}
+                <p class="card-text">Статус: Запущена</p>
+                {% endif %}
+                {% if object.status == 0 %}
+                <p class="card-text">Статус: Завершена</p>
+                {% endif %}
+                <a href="{% url 'detail' object.id %}" class="btn btn-primary form-control">Подробнее</a>
             </div>
         </div>
+    </div>
     {% endfor %}
 </div>
 {% endblock %}
