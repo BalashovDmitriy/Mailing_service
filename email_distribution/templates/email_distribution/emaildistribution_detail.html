@@ -33,9 +33,9 @@
                 <p class="card-text">Письмо: {{ object.message }}</p>
             </div>
             <div class="card-footer">
-                <a href="{% url 'list' %}" class="btn btn-primary">К списку</a>
-                <a href="{% url 'update' object.id %}" class="btn btn-secondary">Редактировать</a>
-                <a href="{% url 'delete' object.id %}" class="btn btn-danger">Удалить</a>
+                <a href="{% url 'mailing_list' %}" class="btn btn-primary">К списку</a>
+                <a href="{% url 'mailing_update' object.id %}" class="btn btn-secondary">Редактировать</a>
+                <a href="{% url 'mailing_delete' object.id %}" class="btn btn-danger">Удалить</a>
             </div>
         </div>
     </div>

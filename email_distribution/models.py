@@ -1,6 +1,6 @@
 from django.db import models
 
-from users.models import User
+NULLABLE = {'blank': True, 'null': True}
 
 
 class Message(models.Model):
@@ -16,7 +16,7 @@ class Message(models.Model):
 
 
 class EmailDistribution(models.Model):
-    emails = models.ManyToManyField('users.User')
+    emails = models.ManyToManyField('Client')
     time = models.DateTimeField(verbose_name='Время рассылки')
     period = models.CharField(choices=[('1', 'Раз в день'), ('2', 'Раз в неделю'), ('3', 'Раз в месяц')],
                               default='1', verbose_name='Период рассылки')
@@ -35,3 +35,28 @@ class Logs(models.Model):
     time = models.DateTimeField(verbose_name='Дата и время последней попытки', default=None)
     status = models.ForeignKey(EmailDistribution, on_delete=models.CASCADE, verbose_name='Статус рассылки')
     response = models.BooleanField(default=False, verbose_name='Ответ почтового сервера')
+
+
+class Client(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Имя клиента")
+    email = models.EmailField(max_length=100, verbose_name="Почта")
+    comment = models.TextField(verbose_name="Комментарий", **NULLABLE)
+
+    def __str__(self):
+        return f'{self.name} ({self.email})'
+
+    class Meta:
+        verbose_name = "Клиент"
+        verbose_name_plural = "Клиенты"
+
+
+class Mail(models.Model):
+    user = models.ForeignKey('email_distribution.Client', on_delete=models.CASCADE, verbose_name='Пользователь')
+    message = models.ForeignKey('email_distribution.Message', on_delete=models.CASCADE, verbose_name='Сообщение')
+
+    def __str__(self):
+        return f'{self.user} - {self.message}'
+
+    class Meta:
+        verbose_name = 'Сообщение'
+        verbose_name_plural = 'Сообщения'

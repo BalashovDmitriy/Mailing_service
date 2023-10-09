@@ -4,12 +4,12 @@
     <div class="col-sm-3 mb-6 mb-sm-0">
         <div class="card" style="width: 28rem;">
             <div class="card-body">
-                <h5 class="card-title">{{ object.username }}</h5>
+                <h5 class="card-title">{{ object.name }}</h5>
                 <p class="card-text">{{ object.email }}</p>
                 <p class="card-text">Комментарий: {{ object.comment }}</p>
-                <a href="{% url 'list_user' %}" class="btn btn-primary">К списку</a>
-                <a href="{% url 'update_user' object.id %}" class="btn btn-secondary">Редактировать</a>
-                <a href="{% url 'delete_user' object.id %}" class="btn btn-danger">Удалить</a>
+                <a href="{% url 'clients_list' %}" class="btn btn-primary">К списку</a>
+                <a href="{% url 'client_update' object.id %}" class="btn btn-secondary">Редактировать</a>
+                <a href="{% url 'client_delete' object.id %}" class="btn btn-danger">Удалить</a>
             </div>
         </div>
     </div>

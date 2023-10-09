@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from config import settings
-from email_distribution.models import EmailDistribution, Message
+from email_distribution.models import EmailDistribution, Message, Client, Mail
 
 
 # Create your views here.
@@ -17,28 +17,20 @@ class EmailDistributionDetailView(DetailView):
 
     def get_object(self, **kwargs):
         obj = super().get_object()
-        print('object:')
-        print(obj.__dict__)
-        print(kwargs)
         return obj
 
     def get_context_data(self, **kwargs):
         cd = super().get_context_data()
-        print('context:')
-        print(cd)
-        print(kwargs)
         return cd
 
 
 class EmailDistributionCreateView(CreateView):
     model = EmailDistribution
     fields = ('emails', 'time', 'period', 'message')
-    success_url = reverse_lazy('list')
+    success_url = reverse_lazy('mailing_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print('context in EmailDistributionCreateView(get_context_data):')
-        print(context)
         return context
 
     def form_valid(self, form):
@@ -50,14 +42,13 @@ class EmailDistributionCreateView(CreateView):
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[obj_mail.email],
             )
-            print(obj_mail.email, status)
         return super().form_valid(form)
 
 
 class EmailDistributionUpdateView(UpdateView):
     model = EmailDistribution
     fields = ('emails', 'time', 'period', 'message')
-    success_url = reverse_lazy('list')
+    success_url = reverse_lazy('mailing_list')
 
     def form_valid(self, form):
         obj: EmailDistribution = form.save()
@@ -68,16 +59,60 @@ class EmailDistributionUpdateView(UpdateView):
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[obj_mail.email],
             )
-            print(obj_mail.email, status)
+            print(status)
         return super().form_valid(form)
 
 
 class EmailDistributionDeleteView(DeleteView):
     model = EmailDistribution
-    success_url = reverse_lazy('list')
+    success_url = reverse_lazy('mailing_list')
 
 
 class MessageCreateView(CreateView):
     model = Message
     fields = ('title', 'body')
-    success_url = reverse_lazy('list')
+    success_url = reverse_lazy('mailing_list')
+
+
+class ClientListView(ListView):
+    model = Client
+
+
+class ClientDetailView(DetailView):
+    model = Client
+
+
+class ClientCreateView(CreateView):
+    model = Client
+    fields = ('name', 'email', 'comment')
+    success_url = reverse_lazy('clients_list')
+
+
+class ClientUpdateView(UpdateView):
+    model = Client
+    fields = ('name', 'email', 'comment')
+    success_url = reverse_lazy('clients_list')
+
+
+class ClientDeleteView(DeleteView):
+    model = Client
+    success_url = reverse_lazy('clients_list')
+
+
+class SendMessageCreateView(CreateView):
+    template_name = 'email_distribution/message_send.html'
+    model = Mail
+    fields = ('user', 'message')
+    success_url = reverse_lazy('clients_list')
+
+    def form_valid(self, form):
+        obj: Mail = form.save()
+        status = send_mail(
+            subject=obj.message.title,
+            message=obj.message.body,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[obj.user.email],
+        )
+        print(status)
+        return super().form_valid(form)
+
