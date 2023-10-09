@@ -1,7 +1,7 @@
 {% extends 'email_distribution/base.html' %}
 {% block content %}
 <div class="row text-center">
-    <a href="{% url 'create' %}" class="btn btn-outline-dark">Создать рассылку</a>
+    <a href="{% url 'mailing_create' %}" class="btn btn-outline-dark">Создать рассылку</a>
     {% for object in object_list %}
     <div class="col-sm-3 mb-3 mb-sm-0">
         <div class="card">
@@ -16,7 +16,7 @@
                 {% if object.status == 0 %}
                 <p class="card-text">Статус: Завершена</p>
                 {% endif %}
-                <a href="{% url 'detail' object.id %}" class="btn btn-primary form-control">Подробнее</a>
+                <a href="{% url 'mailing_detail' object.id %}" class="btn btn-primary form-control">Подробнее</a>
             </div>
         </div>
     </div>

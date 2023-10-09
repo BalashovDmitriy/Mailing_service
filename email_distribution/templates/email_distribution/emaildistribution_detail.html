@@ -12,6 +12,8 @@
                 <p class="card-text">{{ obj }}</p>
                 {% endfor %}
                 <p class="card-text fw-bold">Параметры рассылки</p>
+                <p class="card-text">Начало: {{ object.start }}</p>
+                <p class="card-text">Окончание: {{ object.finish }}</p>
                 {% if object.period == "1" %}
                 <p class="card-text">Периодичность: Раз в день</p>
                 {% endif %}
@@ -33,9 +35,9 @@
                 <p class="card-text">Письмо: {{ object.message }}</p>
             </div>
             <div class="card-footer">
-                <a href="{% url 'list' %}" class="btn btn-primary">К списку</a>
-                <a href="{% url 'update' object.id %}" class="btn btn-secondary">Редактировать</a>
-                <a href="{% url 'delete' object.id %}" class="btn btn-danger">Удалить</a>
+                <a href="{% url 'mailing_list' %}" class="btn btn-primary">К списку</a>
+                <a href="{% url 'mailing_update' object.id %}" class="btn btn-secondary">Редактировать</a>
+                <a href="{% url 'mailing_delete' object.id %}" class="btn btn-danger">Удалить</a>
             </div>
         </div>
     </div>
