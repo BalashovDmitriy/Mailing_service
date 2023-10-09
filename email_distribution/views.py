@@ -1,8 +1,10 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from config import settings
+from email_distribution.forms import EmailDistributionForm, MessageForm, ClientForm
 from email_distribution.models import EmailDistribution, Message, Client, Mail
 
 
@@ -12,7 +14,7 @@ class EmailDistributionListView(ListView):
     model = EmailDistribution
 
 
-class EmailDistributionDetailView(DetailView):
+class EmailDistributionDetailView(LoginRequiredMixin, DetailView):
     model = EmailDistribution
 
     def get_object(self, **kwargs):
@@ -24,9 +26,9 @@ class EmailDistributionDetailView(DetailView):
         return cd
 
 
-class EmailDistributionCreateView(CreateView):
+class EmailDistributionCreateView(LoginRequiredMixin, CreateView):
     model = EmailDistribution
-    fields = ('emails', 'time', 'period', 'message')
+    form_class = EmailDistributionForm
     success_url = reverse_lazy('mailing_list')
 
     def get_context_data(self, **kwargs):
@@ -35,6 +37,8 @@ class EmailDistributionCreateView(CreateView):
 
     def form_valid(self, form):
         obj: EmailDistribution = form.save()
+        obj.owner = self.request.user
+        obj.save()
         for obj_mail in obj.emails.all():
             status = send_mail(
                 subject=obj.message.title,
@@ -45,9 +49,9 @@ class EmailDistributionCreateView(CreateView):
         return super().form_valid(form)
 
 
-class EmailDistributionUpdateView(UpdateView):
+class EmailDistributionUpdateView(LoginRequiredMixin, UpdateView):
     model = EmailDistribution
-    fields = ('emails', 'time', 'period', 'message')
+    form_class = EmailDistributionForm
     success_url = reverse_lazy('mailing_list')
 
     def form_valid(self, form):
@@ -63,38 +67,44 @@ class EmailDistributionUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-class EmailDistributionDeleteView(DeleteView):
+class EmailDistributionDeleteView(LoginRequiredMixin, DeleteView):
     model = EmailDistribution
     success_url = reverse_lazy('mailing_list')
 
 
-class MessageCreateView(CreateView):
+class MessageCreateView(LoginRequiredMixin, CreateView):
     model = Message
-    fields = ('title', 'body')
+    form_class = MessageForm
     success_url = reverse_lazy('mailing_list')
 
 
-class ClientListView(ListView):
+class ClientListView(LoginRequiredMixin, ListView):
     model = Client
 
 
-class ClientDetailView(DetailView):
+class ClientDetailView(LoginRequiredMixin, DetailView):
     model = Client
 
 
-class ClientCreateView(CreateView):
+class ClientCreateView(LoginRequiredMixin, CreateView):
     model = Client
-    fields = ('name', 'email', 'comment')
+    form_class = ClientForm
+    success_url = reverse_lazy('clients_list')
+
+    def form_valid(self, form):
+        obj: Client = form.save()
+        obj.owner = self.request.user
+        obj.save()
+        return super().form_valid(form)
+
+
+class ClientUpdateView(LoginRequiredMixin, UpdateView):
+    model = Client
+    form_class = ClientForm
     success_url = reverse_lazy('clients_list')
 
 
-class ClientUpdateView(UpdateView):
-    model = Client
-    fields = ('name', 'email', 'comment')
-    success_url = reverse_lazy('clients_list')
-
-
-class ClientDeleteView(DeleteView):
+class ClientDeleteView(LoginRequiredMixin, DeleteView):
     model = Client
     success_url = reverse_lazy('clients_list')
 
