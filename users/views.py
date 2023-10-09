@@ -39,7 +39,6 @@ class MessageSendCreateView(CreateView):
 
     def form_valid(self, form):
         obj: Message = form.save()
-        print(obj)
         status = send_mail(
             subject=obj.message.title,
             message=obj.message.body,
