@@ -19,8 +19,8 @@
                     <div class="card-footer">
                         {% if user.is_authenticated %}
                             <input class="custom-btn btn-1" type="submit" value="Изменить"/>
-                            <a class="custom-btn btn-13" href="{% url 'reset_password' %}">Восстановить
-                                пароль</a>
+                            <a class="custom-btn btn-13" href="{% url 'reset_password' %}">Сгенерировать новый
+                                пароль и отправить на почту</a>
                         {% else %}
                             <input class="custom-btn btn-1" type="submit" value="Регистрация"/>
                         {% endif %}
