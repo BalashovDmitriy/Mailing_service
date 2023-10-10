@@ -38,6 +38,7 @@ INSTALLED_APPS = [
 
     'email_distribution.apps.EmailDistributionConfig',
     'users.apps.UsersConfig',
+    'blog.apps.BlogConfig',
     'django_crontab'
 ]
 
@@ -146,5 +147,5 @@ CRONJOBS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.User'
 LOGIN_REDIRECT_URL = 'mailing_list'
-LOGOUT_REDIRECT_URL = 'mailing_list'
+LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = 'login'
