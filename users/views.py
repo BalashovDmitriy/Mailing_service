@@ -47,7 +47,7 @@ class UserCreateView(CreateView):
 class UserUpdateView(UpdateView):
     model = User
     form_class = UserUpdateForm
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('mailing_list')
 
     def get_object(self, queryset=None):
         return self.request.user
@@ -63,7 +63,7 @@ def reset_password(request):
         from_email=settings.DEFAULT_FROM_EMAIL,
         recipient_list=[request.user.email],
     )
-    return redirect(reverse_lazy('home'))
+    return redirect(reverse_lazy('mailing_list'))
 
 
 def activate(request, uidb64, token):
