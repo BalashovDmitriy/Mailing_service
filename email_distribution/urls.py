@@ -3,7 +3,8 @@ from django.urls import path
 from email_distribution.views import *
 
 urlpatterns = [
-    path('', EmailDistributionListView.as_view(), name='mailing_list'),
+    path('', index, name='index'),
+    path('mailings/', EmailDistributionListView.as_view(), name='mailing_list'),
     path('<int:pk>/', EmailDistributionDetailView.as_view(), name='mailing_detail'),
     path('create/', EmailDistributionCreateView.as_view(), name='mailing_create'),
     path('update/<int:pk>', EmailDistributionUpdateView.as_view(), name='mailing_update'),

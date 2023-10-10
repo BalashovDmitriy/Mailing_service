@@ -1,16 +1,39 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
+from blog.models import Blog
 from config import settings
 from email_distribution.forms import EmailDistributionForm, MessageForm, ClientForm
 from email_distribution.models import EmailDistribution, Message, Client, Mail
 
 
-# Create your views here.
+def index(request):
+    counter_all = 0
+    counter_active = 0
+    counter_client = 0
+    mailing_list = EmailDistribution.objects.all()
+    clients_list = Client.objects.all()
+    for obj in mailing_list:
+        if obj:
+            counter_all += 1
+            if obj.status == 1:
+                counter_active += 1
+    for obj in clients_list:
+        if obj:
+            counter_client += 1
+    context = {
+        'all_mailings': counter_all,
+        'active_mailings': counter_active,
+        'active_clients': counter_client,
+        'blogs': Blog.objects.all(),
+    }
+    return render(request, 'email_distribution/index.html', context)
 
-class EmailDistributionListView(ListView):
+
+class EmailDistributionListView(LoginRequiredMixin, ListView):
     model = EmailDistribution
 
 
@@ -125,4 +148,3 @@ class SendMessageCreateView(CreateView):
         )
         print(status)
         return super().form_valid(form)
-
