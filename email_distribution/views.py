@@ -28,7 +28,7 @@ def index(request):
         'all_mailings': counter_all,
         'active_mailings': counter_active,
         'active_clients': counter_client,
-        'blogs': Blog.objects.all(),
+        'blogs': Blog.objects.all()[:3],
     }
     return render(request, 'email_distribution/index.html', context)
 
