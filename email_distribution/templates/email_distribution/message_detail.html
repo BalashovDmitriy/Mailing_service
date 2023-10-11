@@ -1,0 +1,21 @@
+{% extends 'email_distribution/base.html' %}
+{% block content %}
+    <div class="row text-center">
+        <div class="col-4"></div>
+        <div class="col-4">
+            <div class="card" style="width: 28rem;">
+                <div class="card-header">
+                    <p class="card-text">{{ object.title }}</p>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{{ object.body }}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'mail_list' %}" class="btn btn-primary">К списку</a>
+                    <a href="{% url 'mail_update' object.id %}" class="btn btn-secondary">Редактировать</a>
+                    <a href="{% url 'mail_delete' object.id %}" class="btn btn-danger">Удалить</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

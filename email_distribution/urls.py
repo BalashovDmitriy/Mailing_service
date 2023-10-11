@@ -9,7 +9,12 @@ urlpatterns = [
     path('create/', EmailDistributionCreateView.as_view(), name='mailing_create'),
     path('update/<int:pk>', EmailDistributionUpdateView.as_view(), name='mailing_update'),
     path('delete/<int:pk>', EmailDistributionDeleteView.as_view(), name='mailing_delete'),
-    path('create_mail/', MessageCreateView.as_view(), name='create_mail'),
+
+    path('mail_create/', MessageCreateView.as_view(), name='mail_create'),
+    path('mail_list/', MessageListView.as_view(), name='mail_list'),
+    path('mail/<int:pk>/', MessageDetailView.as_view(), name='mail_detail'),
+    path('mail/update/<int:pk>', MessageUpdateView.as_view(), name='mail_update'),
+    path('mail/delete/<int:pk>', MessageDeleteView.as_view(), name='mail_delete'),
 
     path('clients/', ClientListView.as_view(), name='clients_list'),
     path('client/<int:pk>/', ClientDetailView.as_view(), name='client_detail'),

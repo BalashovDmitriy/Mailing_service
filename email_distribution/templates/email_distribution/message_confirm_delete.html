@@ -1,0 +1,20 @@
+{% extends 'email_distribution/base.html' %}
+{% block content %}
+    <div class="row text-center">
+        <div class="col-4"></div>
+        <div class="col-4">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal text-center">Удалить письмо</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="" class="form-floating form-control">
+                        {% csrf_token %}
+                        <h5 class="text-center">Письмо: {{ object.title }} </h5>
+                        <input class="btn btn-primary w-100" type="submit" value="Удалить"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
