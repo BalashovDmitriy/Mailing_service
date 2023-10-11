@@ -4,18 +4,28 @@
         <div class="col-4"></div>
         <div class="col-4">
             <div class="card mb-4 box-shadow">
-                <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">Создать письмо</h4>
-                </div>
-                <div class="card-body">
-                    <form method="post" action="" class="form-floating form-control">
+                <form method="post" action="" class="form-floating form-control">
+                    <div class="card-header">
+                        {% if object %}
+                            <h4 class="my-0 font-weight-normal">Редактировать письмо</h4>
+                        {% else %}
+                            <h4 class="my-0 font-weight-normal">Создать письмо</h4>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
                         {% csrf_token %}
                         <div class="mb-3">
                             {{ form.as_p }}
                         </div>
-                        <input class="btn btn-primary w-100" type="submit" value="Создать"/>
-                    </form>
-                </div>
+                    </div>
+                    <div class="card-header">
+                        {% if object %}
+                            <input class="btn btn-primary w-100" type="submit" value="Редактировать"/>
+                        {% else %}
+                            <input class="btn btn-primary w-100" type="submit" value="Создать"/>
+                        {% endif %}
+                    </div>
+                </form>
             </div>
         </div>
     </div>

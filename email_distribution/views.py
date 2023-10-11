@@ -8,6 +8,7 @@ from blog.models import Blog
 from config import settings
 from email_distribution.forms import EmailDistributionForm, MessageForm, ClientForm
 from email_distribution.models import EmailDistribution, Message, Client, Mail
+from email_distribution.services import send_one_mail
 
 
 def index(request):
@@ -39,14 +40,6 @@ class EmailDistributionListView(LoginRequiredMixin, ListView):
 
 class EmailDistributionDetailView(LoginRequiredMixin, DetailView):
     model = EmailDistribution
-
-    def get_object(self, **kwargs):
-        obj = super().get_object()
-        return obj
-
-    def get_context_data(self, **kwargs):
-        cd = super().get_context_data()
-        return cd
 
 
 class EmailDistributionCreateView(LoginRequiredMixin, CreateView):
@@ -98,7 +91,32 @@ class EmailDistributionDeleteView(LoginRequiredMixin, DeleteView):
 class MessageCreateView(LoginRequiredMixin, CreateView):
     model = Message
     form_class = MessageForm
-    success_url = reverse_lazy('mailing_list')
+    success_url = reverse_lazy('mail_list')
+
+    def form_valid(self, form):
+        obj: Message = form.save()
+        obj.owner = self.request.user
+        obj.save()
+        return super().form_valid(form)
+
+
+class MessageListView(LoginRequiredMixin, ListView):
+    model = Message
+
+
+class MessageDetailView(LoginRequiredMixin, DetailView):
+    model = Message
+
+
+class MessageUpdateView(LoginRequiredMixin, UpdateView):
+    model = Message
+    form_class = MessageForm
+    success_url = reverse_lazy('mail_list')
+
+
+class MessageDeleteView(LoginRequiredMixin, DeleteView):
+    model = Message
+    success_url = reverse_lazy('mail_list')
 
 
 class ClientListView(LoginRequiredMixin, ListView):
@@ -140,11 +158,5 @@ class SendMessageCreateView(CreateView):
 
     def form_valid(self, form):
         obj: Mail = form.save()
-        status = send_mail(
-            subject=obj.message.title,
-            message=obj.message.body,
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[obj.user.email],
-        )
-        print(status)
+        send_one_mail(obj)
         return super().form_valid(form)
