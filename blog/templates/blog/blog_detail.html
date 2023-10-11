@@ -1,0 +1,25 @@
+{% extends 'email_distribution/base.html' %}
+{% load my_tags %}
+{% block content %}
+    <div class="row text-center">
+        <div class="col-12 mb-5 mt-5">
+            <div class="card">
+                <img src="{% media_path_tag blog.image %}"
+                     class="card-img" alt="">
+                <div class="card-body">
+                    <h5 class="card-title">{{ blog.title }}</h5>
+                    <p class="card-text">{{ blog.description }}</p>
+                    <p class="card-text">Дата публикации: {{ blog.created_at }}</p>
+                    <p class="card-text">Количество просмотров: {{ blog.views }}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'index' %}" class="custom-btn btn-11">
+                        <span>
+                            На главную
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -4,18 +4,21 @@
         {% for object in object_list %}
             <div class="col-sm-3 mb-3 mb-sm-0">
                 <div class="card">
+                <div class="card-header">
+                    <p class="card-text">{{ object.start }} - {{ object.finish }}</p>
+                </div>
                     <div class="card-body">
-                        <h5 class="card-title">{{ object.time }}</h5>
                         {% if object.status == 1 %}
-                            <p class="card-text">Статус: Создана</p>
+                            <p class="card-text alert alert-primary">Статус: Создана</p>
                         {% endif %}
                         {% if object.status == 2 %}
-                            <p class="card-text">Статус: Запущена</p>
+                            <p class="card-text alert alert-success">Статус: Запущена</p>
                         {% endif %}
                         {% if object.status == 0 %}
-                            <p class="card-text">Статус: Завершена</p>
+                            <p class="card-text alert alert-danger">Статус: Завершена</p>
                         {% endif %}
-                        <div class="card-header">
+                        <p class="card-text">Письмо: {{ object.message.title }}</p>
+                        <div class="card-footer">
                             <a href="{% url 'mailing_detail' object.id %}"
                                class="btn btn-primary form-control">Подробнее</a>
                         </div>
