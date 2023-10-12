@@ -20,8 +20,9 @@ class Message(models.Model):
 
 class EmailDistribution(models.Model):
     emails = models.ManyToManyField('Client', verbose_name='Клиенты')
-    start = models.DateField(verbose_name='Дата начала рассылки')
-    finish = models.DateField(verbose_name='Дата окончания рассылки')
+    start = models.DateTimeField(verbose_name='Дата начала рассылки')
+    next = models.DateTimeField(verbose_name='Дата следующей попытки', **NULLABLE)
+    finish = models.DateTimeField(verbose_name='Дата окончания рассылки')
     period = models.CharField(choices=[('1', 'Раз в день'), ('2', 'Раз в неделю'), ('3', 'Раз в месяц')],
                               default='1', verbose_name='Период рассылки')
     status = models.PositiveSmallIntegerField(default=1, verbose_name='Статус рассылки')
@@ -39,8 +40,8 @@ class EmailDistribution(models.Model):
 
 class Logs(models.Model):
     time = models.DateTimeField(verbose_name='Дата и время последней попытки', default=None)
-    status = models.ForeignKey(EmailDistribution, on_delete=models.CASCADE, verbose_name='Статус рассылки')
-    response = models.BooleanField(default=False, verbose_name='Ответ почтового сервера')
+    mailing = models.ForeignKey(EmailDistribution, on_delete=models.CASCADE, verbose_name='Статус рассылки')
+    response = models.BooleanField(default=False, verbose_name='Ответ почтового сервера', **NULLABLE)
 
 
 class Client(models.Model):

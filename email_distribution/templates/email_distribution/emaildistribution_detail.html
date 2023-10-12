@@ -13,6 +13,7 @@
                     {% endfor %}
                     <p class="card-text fw-bold">Параметры рассылки</p>
                     <p class="card-text">Начало: {{ object.start }}</p>
+                    <p class="card-text">Следующая попытка: {{ object.next }}</p>
                     <p class="card-text">Окончание: {{ object.finish }}</p>
                     {% if object.period == "1" %}
                         <p class="card-text">Периодичность: Раз в день</p>
