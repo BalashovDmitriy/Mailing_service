@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from email_distribution.models import EmailDistribution, Message
+from email_distribution.models import EmailDistribution, Message, Logs
 
 
 # Register your models here.
@@ -12,3 +12,9 @@ class EmailDistributionAdmin(admin.ModelAdmin):
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
     fields = ('title', 'body')
+
+
+@admin.register(Logs)
+class LogsAdmin(admin.ModelAdmin):
+    fields = ('time', 'mail', 'mailing', 'response')
+    readonly_fields = ('time', 'mail', 'response', 'mailing')
