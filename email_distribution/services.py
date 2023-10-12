@@ -33,6 +33,7 @@ def send_and_log(obj: EmailDistribution):
         Logs.objects.create(
             time=now,
             mailing=obj,
+            mail=obj_email.email,
             response=bool(status),
         )
     connection.close()

@@ -18,7 +18,7 @@ def index(request):
     for obj in mailing_list:
         if obj:
             counter_all += 1
-            if obj.status == 1:
+            if obj.status == 2:
                 counter_active += 1
     for obj in clients_list:
         if obj:

@@ -40,8 +40,16 @@ class EmailDistribution(models.Model):
 
 class Logs(models.Model):
     time = models.DateTimeField(verbose_name='Дата и время последней попытки', default=None)
-    mailing = models.ForeignKey(EmailDistribution, on_delete=models.CASCADE, verbose_name='Статус рассылки')
+    mailing = models.ForeignKey(EmailDistribution, on_delete=models.CASCADE, verbose_name='Рассылка')
+    mail = models.EmailField(max_length=100, verbose_name='Почта', **NULLABLE)
     response = models.BooleanField(default=False, verbose_name='Ответ почтового сервера', **NULLABLE)
+
+    def __str__(self):
+        return f'{self.time} - {self.response}'
+
+    class Meta:
+        verbose_name = 'Лог'
+        verbose_name_plural = 'Логи'
 
 
 class Client(models.Model):
