@@ -1,12 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.mail import send_mail
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from blog.models import Blog
-from config import settings
-from email_distribution.forms import EmailDistributionForm, MessageForm, ClientForm
+from email_distribution.forms import MessageForm, ClientForm, EmailDistributionCreateForm, EmailDistributionUpdateForm
 from email_distribution.models import EmailDistribution, Message, Client, Mail
 from email_distribution.services import send_one_mail
 
@@ -44,43 +42,23 @@ class EmailDistributionDetailView(LoginRequiredMixin, DetailView):
 
 class EmailDistributionCreateView(LoginRequiredMixin, CreateView):
     model = EmailDistribution
-    form_class = EmailDistributionForm
+    form_class = EmailDistributionCreateForm
     success_url = reverse_lazy('mailing_list')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
 
     def form_valid(self, form):
         obj: EmailDistribution = form.save()
         obj.owner = self.request.user
+        obj.next = obj.start
+        if obj.finish <= obj.next:
+            obj.status = 0
         obj.save()
-        for obj_mail in obj.emails.all():
-            status = send_mail(
-                subject=obj.message.title,
-                message=obj.message.body,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[obj_mail.email],
-            )
         return super().form_valid(form)
 
 
 class EmailDistributionUpdateView(LoginRequiredMixin, UpdateView):
     model = EmailDistribution
-    form_class = EmailDistributionForm
+    form_class = EmailDistributionUpdateForm
     success_url = reverse_lazy('mailing_list')
-
-    def form_valid(self, form):
-        obj: EmailDistribution = form.save()
-        for obj_mail in obj.emails.all():
-            status = send_mail(
-                subject=obj.message.title,
-                message=obj.message.body,
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=[obj_mail.email],
-            )
-            print(status)
-        return super().form_valid(form)
 
 
 class EmailDistributionDeleteView(LoginRequiredMixin, DeleteView):

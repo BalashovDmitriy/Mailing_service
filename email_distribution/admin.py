@@ -6,7 +6,7 @@ from email_distribution.models import EmailDistribution, Message
 # Register your models here.
 @admin.register(EmailDistribution)
 class EmailDistributionAdmin(admin.ModelAdmin):
-    fields = ('emails', 'time', 'period', 'message')
+    fields = ('emails', 'start', 'finish', 'period', 'message')
 
 
 @admin.register(Message)
