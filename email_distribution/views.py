@@ -54,6 +54,11 @@ class EmailDistributionUpdateView(LoginRequiredMixin, UserPassesTestMixin, Updat
     form_class = EmailDistributionUpdateForm
     success_url = reverse_lazy('mailing_list')
 
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['owner'] = self.request.user
+        return initial
+
     def test_func(self):
         return not self.request.user.is_staff
 
