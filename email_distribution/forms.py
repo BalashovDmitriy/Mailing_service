@@ -1,5 +1,4 @@
 from django import forms
-
 from email_distribution.models import EmailDistribution, Message, Client
 from users.forms import MixinForm
 

@@ -3,32 +3,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-
-from blog.models import Blog
 from email_distribution.forms import MessageForm, ClientForm, EmailDistributionCreateForm, EmailDistributionUpdateForm
 from email_distribution.models import EmailDistribution, Message, Client, Logs
+from email_distribution.services import index_get_cache
 
 
 def index(request):
-    counter_all = 0
-    counter_active = 0
-    counter_client = 0
-    mailing_list = EmailDistribution.objects.all()
-    clients_list = Client.objects.all()
-    for obj in mailing_list:
-        if obj:
-            counter_all += 1
-            if obj.status == 2 and obj.is_active:
-                counter_active += 1
-    for obj in clients_list:
-        if obj:
-            counter_client += 1
-    context = {
-        'all_mailings': counter_all,
-        'active_mailings': counter_active,
-        'active_clients': counter_client,
-        'blogs': Blog.objects.all()[:3],
-    }
+    context = index_get_cache()
     return render(request, 'email_distribution/index.html', context)
 
 
