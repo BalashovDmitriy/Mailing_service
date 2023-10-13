@@ -1,17 +1,45 @@
 {% extends 'email_distribution/base.html' %}
+{% load my_tags %}
 {% block content %}
     <div class="row text-center">
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title">{{ object.time }}</h5>
+                    <h5 class="card-title">Детали рассылки</h5>
                 </div>
                 <div class="card-body">
-                    <p class="card-text fw-bold">Получатели:</p>
-                    {% for obj in object.emails.all %}
-                        <p class="card-text">{{ obj }}</p>
-                    {% endfor %}
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop">
+                        Получатели
+                    </button>
+                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Получатели рассылки</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    {% for obj in object.emails.all %}
+                                        <p>{{ obj.email }}</p>
+                                    {% endfor %}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <p class="card-text fw-bold">Параметры рассылки</p>
+                    {% if user.is_staff %}
+                        <p class="card-text">Пользователь: {{ object.owner }}</p>
+                    {% endif %}
+                    {% if not object.is_active %}
+                        <p class="card-text alert alert-danger">Отключена модератором</p>
+                    {% endif %}
                     <p class="card-text">Начало: {{ object.start }}</p>
                     <p class="card-text">Следующая попытка: {{ object.next }}</p>
                     <p class="card-text">Окончание: {{ object.finish }}</p>
@@ -37,10 +65,61 @@
                 </div>
                 <div class="card-footer">
                     <a href="{% url 'mailing_list' %}" class="btn btn-primary">К списку</a>
-                    <a href="{% url 'mailing_update' object.id %}" class="btn btn-secondary">Редактировать</a>
-                    <a href="{% url 'mailing_delete' object.id %}" class="btn btn-danger">Удалить</a>
+                    {% if user.is_staff %}
+                        {% if object.is_active %}
+                            {% if object.status != 0 %}
+                                <a href="{% url 'mailing_active' object.pk %}" class="btn btn-success">Активна</a>
+                            {% endif %}
+                        {% else %}
+                            {% if object.status != 0 %}
+                                <a href="{% url 'mailing_active' object.pk %}" class="btn btn-danger">Деактивирована</a>
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                        {% if object.status != 0 %}
+                            <a href="{% url 'mailing_update' object.id %}" class="btn btn-secondary">Редактировать</a>
+                        {% endif %}
+                        <a href="{% url 'mailing_delete' object.id %}" class="btn btn-danger">Удалить</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
+        {% if object.logs_set.all %}
+            <div class="col-12 mb-3 mt-3 alert alert-secondary h5">Логи по рассылке</div>
+            <div class="col-12 mb-3 mt-3">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Время</th>
+                        <th scope="col">Почта</th>
+                        <th scope="col">Попытка</th>
+                        <th scope="col">Рассылка</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for obj in object.logs_set.all|reverse %}
+                        <tr>
+                            <th scope="row">{{ obj.time }}</th>
+                            <td>{{ obj.mail }}</td>
+                            {% if obj.response %}
+                                <td>
+                                    <div class="alert alert-success">
+                                        OK
+                                    </div>
+                                </td>
+                            {% else %}
+                                <td>
+                                    <div class="alert alert-danger">
+                                        ОШИБКА
+                                    </div>
+                                </td>
+                            {% endif %}
+                            <td>{{ obj.mailing.start }} - {{ obj.mailing.finish }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

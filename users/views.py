@@ -1,18 +1,28 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail, EmailMessage
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, ListView
 from config import settings
 from users.forms import UserCreationForm, UserUpdateForm
 from users.models import User
 from users.token import account_activation_token
 
 import random
+
+
+class UserListView(LoginRequiredMixin, ListView):
+    model = User
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return User.objects.all()
 
 
 class UserCreateView(CreateView):
@@ -81,3 +91,13 @@ def activate(request, uidb64, token):
         return redirect(reverse_lazy('failure_verify'))
 
 
+@login_required
+def toggle_active(request, pk):
+    if request.user.is_staff:
+        user = get_object_or_404(User, pk=pk)
+        if user.is_active:
+            user.is_active = False
+        else:
+            user.is_active = True
+        user.save()
+    return redirect('user_list')

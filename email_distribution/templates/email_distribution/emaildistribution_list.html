@@ -12,14 +12,18 @@
                         <p class="card-text">{{ object.start }} - {{ object.finish }}</p>
                     </div>
                     <div class="card-body">
-                        {% if object.status == 1 %}
-                            <p class="card-text alert alert-primary">Статус: Создана</p>
-                        {% endif %}
-                        {% if object.status == 2 %}
-                            <p class="card-text alert alert-success">Статус: Запущена</p>
-                        {% endif %}
-                        {% if object.status == 0 %}
-                            <p class="card-text alert alert-danger">Статус: Завершена</p>
+                        {% if object.is_active %}
+                            {% if object.status == 1 %}
+                                <p class="card-text alert alert-primary">Статус: Создана</p>
+                            {% endif %}
+                            {% if object.status == 2 %}
+                                <p class="card-text alert alert-success">Статус: Запущена</p>
+                            {% endif %}
+                            {% if object.status == 0 %}
+                                <p class="card-text alert alert-danger">Статус: Завершена</p>
+                            {% endif %}
+                        {% else %}
+                            <p class="card-text alert alert-danger">Статус: Отключена</p>
                         {% endif %}
                         <p class="card-text">Письмо: {{ object.message.title }}</p>
                         <div class="card-footer">

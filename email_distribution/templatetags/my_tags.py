@@ -10,6 +10,11 @@ def media_path_filter(value):
     return ''
 
 
+@register.filter()
+def reverse(value):
+    return value[::-1]
+
+
 @register.simple_tag()
 def media_path_tag(value):
     if value:

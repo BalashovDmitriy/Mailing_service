@@ -11,10 +11,10 @@ class EmailDistributionAdmin(admin.ModelAdmin):
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
-    fields = ('title', 'body')
+    fields = ('title', 'body', 'owner')
 
 
 @admin.register(Logs)
 class LogsAdmin(admin.ModelAdmin):
-    fields = ('time', 'mail', 'mailing', 'response')
-    readonly_fields = ('time', 'mail', 'response', 'mailing')
+    fields = ('time', 'mail', 'mailing', 'response', 'owner')
+    readonly_fields = ('time', 'mail', 'mailing', 'owner')

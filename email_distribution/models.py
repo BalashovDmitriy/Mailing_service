@@ -28,6 +28,7 @@ class EmailDistribution(models.Model):
     status = models.PositiveSmallIntegerField(default=1, verbose_name='Статус рассылки')
     message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='Сообщение', default=None)
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, **NULLABLE)
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -43,6 +44,7 @@ class Logs(models.Model):
     mailing = models.ForeignKey(EmailDistribution, on_delete=models.CASCADE, verbose_name='Рассылка')
     mail = models.EmailField(max_length=100, verbose_name='Почта', **NULLABLE)
     response = models.BooleanField(default=False, verbose_name='Ответ почтового сервера', **NULLABLE)
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, **NULLABLE)
 
     def __str__(self):
         return f'{self.time} - {self.response}'
@@ -64,15 +66,3 @@ class Client(models.Model):
     class Meta:
         verbose_name = "Клиент"
         verbose_name_plural = "Клиенты"
-
-
-class Mail(models.Model):
-    user = models.ForeignKey('email_distribution.Client', on_delete=models.CASCADE, verbose_name='Пользователь')
-    message = models.ForeignKey('email_distribution.Message', on_delete=models.CASCADE, verbose_name='Сообщение')
-
-    def __str__(self):
-        return f'{self.user} - {self.message}'
-
-    class Meta:
-        verbose_name = 'Сообщение'
-        verbose_name_plural = 'Сообщения'

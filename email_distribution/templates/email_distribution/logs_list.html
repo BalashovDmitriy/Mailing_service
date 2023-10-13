@@ -1,0 +1,38 @@
+{% extends 'email_distribution/base.html' %}
+{% block content %}
+    <div class="row text-center">
+        <div class="col-12 mb-3 mt-3">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Время</th>
+                    <th scope="col">Почта</th>
+                    <th scope="col">Попытка</th>
+                    <th scope="col">Рассылка</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for object in object_list %}
+                    <tr>
+                        <th scope="row">{{ object.time }}</th>
+                        <td>{{ object.mail }}</td>
+                        {% if object.response %}
+                            <td>
+                                <div class="alert alert-success">
+                                    OK
+                                </div>
+                            </td>
+                        {% else %}
+                            <td>
+                                <div class="alert alert-danger">
+                                    ОШИБКА
+                                </div>
+                            </td>
+                        {% endif %}
+                        <td>{{ object.mailing.start }} - {{ object.mailing.finish }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+{% endblock %}
