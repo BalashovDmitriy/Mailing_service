@@ -1,0 +1,40 @@
+{% extends 'email_distribution/base.html' %}
+{% block content %}
+    <div class="row text-center">
+        <a class="col-12 mb-3 mt-3">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Почта</th>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Фамилия</th>
+                    <th scope="col">Статус</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for object in object_list %}
+                    {% if not object.is_staff and not object.is_superuser %}
+                        <tr>
+                            <th scope="row">{{ object.email }}</th>
+                            <td>{{ object.first_name }}</td>
+                            <td>{{ object.email }}</td>
+                            {% if object.is_active %}
+                                <td>
+                                    <a href="{% url 'toggle_active' object.pk %}" class="btn btn-success">
+                                        Активен
+                                    </a>
+                                </td>
+                            {% else %}
+                                <td>
+                                    <a href="{% url 'toggle_active' object.pk %}" class="btn btn-danger">
+                                        Деактивирован
+                                    </a>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+{% endblock %}

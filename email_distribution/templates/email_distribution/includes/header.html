@@ -2,11 +2,17 @@
     <h5 class="my-0 mr-md-auto font-weight-normal">Сервис рассылок</h5>
     <nav class="ms-5">
         {% if user.is_authenticated %}
-            <a class="custom-btn btn-3 text-center mt-2" style="width: 15rem" href="{% url 'index' %}"><span>Главная</span></a>
-            <a class="p-2 btn btn-primary" href="{% url 'mailing_list' %}">Мои рассылки</a>
-            <a class="p-2 btn btn-secondary" href="{% url 'clients_list' %}">Список клиентов</a>
-            <a class="btn btn-warning" href="{% url 'send_message' %}">Отправить письмо</a>
-            <a class="btn btn-warning" href="{% url 'mail_list' %}">Мои Письма</a>
+            <a class="custom-btn btn-3 text-center mt-2" style="width: 15rem"
+               href="{% url 'index' %}"><span>Главная</span></a>
+            {% if not user.is_staff %}
+                <a class="p-2 btn btn-primary" href="{% url 'mailing_list' %}">Мои рассылки</a>
+                <a class="p-2 btn btn-primary" href="{% url 'logs_list' %}">Логи</a>
+                <a class="p-2 btn btn-secondary" href="{% url 'clients_list' %}">Список клиентов</a>
+                <a class="btn btn-warning" href="{% url 'mail_list' %}">Мои Письма</a>
+            {% else %}
+                <a class="p-2 btn btn-danger" href="{% url 'mailing_list' %}">Рассылки</a>
+                <a class="p-2 btn btn-danger" href="{% url 'user_list' %}">Пользователи</a>
+            {% endif %}
             <a class="custom-btn btn-3 text-center mt-2" style="width: 15rem"
                href="{% url 'logout' %}"><span>Выйти</span></a>
             <a class="custom-btn btn-1 text-center mt-2" style="width: 15rem" href="{% url 'profile' %}">Профиль</a>

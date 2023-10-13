@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <form method="post" action="" class="form-floating form-control">
                         {% csrf_token %}
-                        <h5 class="text-center">Рассылка: {{ object.time }} </h5>
+                        <h5 class="text-center">Рассылка: {{ object.start }} - {{ object.finish }} </h5>
                         <input class="btn btn-primary w-100" type="submit" value="Удалить"/>
                     </form>
                 </div>
